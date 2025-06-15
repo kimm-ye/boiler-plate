@@ -1,14 +1,10 @@
 const express = require('express')
 const app = express()
-const port = 5000
-
 // bodyparser 세팅
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-
 const { auth } = require('./middleware/auth');
 const { User } = require('./models/User');
-
 const config = require('./config/key');
 
 // application/x-www-form-urlencoded
@@ -27,7 +23,11 @@ app.get('/', (req, res) => {
   res.send('Hello World!!!!')
 })
 
-app.post('/api/user/register', async (req, res) => {
+app.get('/api/hello', (req, res) => {
+  res.send('안녕하세요')
+})
+
+app.post('/api/users/register', async (req, res) => {
     // 회원가입할때 필요한 정보들을 client 에서 가져오면 그것들을 데이터베이스에 넣어준다.
 
     // req.body안에는 json 형식으로 데이터 들어가 있음
@@ -40,7 +40,7 @@ app.post('/api/user/register', async (req, res) => {
     }
 })
 
-app.post('/api/user/login', async (req, res) => {
+app.post('/api/users/login', async (req, res) => {
   try {
     
     const userInfo = await User.findOne({ email: req.body.email });
@@ -81,7 +81,7 @@ app.post('/api/user/login', async (req, res) => {
 })
 
 // role 0 -> 일반유저, 아니면 관리자
-app.get('/api/user/auth', auth, (req, res) => {
+app.get('/api/users/auth', auth, (req, res) => {
 
   // 여기까지 미들웨어를 통과해 왔다는 이야기는 Authentication이 true라는 말
   res.status(200).json({
@@ -96,7 +96,7 @@ app.get('/api/user/auth', auth, (req, res) => {
   })
 })
 
-app.get('/api/user/logout', auth, async (req, res) => {
+app.get('/api/users/logout', auth, async (req, res) => {
   try {
     console.log('55555');
     
@@ -113,6 +113,7 @@ app.get('/api/user/logout', auth, async (req, res) => {
   }
 })
 
+const port = 5000
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
