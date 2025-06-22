@@ -28,6 +28,8 @@ app.get('/api/hello', (req, res) => {
 })
 
 app.post('/api/users/register', async (req, res) => {
+    console.log('회원가입 req.body:', req.body);
+  
     // 회원가입할때 필요한 정보들을 client 에서 가져오면 그것들을 데이터베이스에 넣어준다.
 
     // req.body안에는 json 형식으로 데이터 들어가 있음
@@ -36,6 +38,7 @@ app.post('/api/users/register', async (req, res) => {
         await user.save(); // 저장 성공시 다음 줄로 지행
         return res.status(200).json({ success: true });
     } catch (error) {
+        console.log('회원가입 에러:', error.response?.data || error.message);
         return res.status(400).json({ success: false, error: error.message });
     }
 })
@@ -98,10 +101,9 @@ app.get('/api/users/auth', auth, (req, res) => {
 
 app.get('/api/users/logout', auth, async (req, res) => {
   try {
-    console.log('55555');
     
     await User.findOneAndUpdate({ _id : req.user._id}, {token : ""});
-    console.log('666666');
+    
     return res.status(200).json ({
       success : true
     })

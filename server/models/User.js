@@ -80,11 +80,8 @@ userSchema.statics.findByToken = async function(token, cb) {
     const userModel = this;
 
     try {
-        const decoded = jwt.verify(token, 'secretToken');
         // 토큰을 decode
-
-        console.log('2222 : ' + decoded);
-        console.log('3333: ' + token);
+        const decoded = jwt.verify(token, 'secretToken');
         
         // 유저아이디를 이용해서 유저를 찾은 다음에 
         // 클라이언트에서 가져온 token과 DB에 보관된 토큰이 일치하는지 확인한다.
@@ -94,7 +91,7 @@ userSchema.statics.findByToken = async function(token, cb) {
             console.warn("사용자 찾을 수 없음 (토큰 불일치)");
             return cb(null, null);
         } else {
-            console.log("사용자 찾음:", user);
+            // console.log("사용자 찾음:", user);
             return cb(null, user)
         }
             
